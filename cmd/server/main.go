@@ -1,18 +1,33 @@
 package main
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+	"github.com/Omar-p/go-rest-api/internal/db"
+	"os"
+)
 
 type Server struct {
 }
 
 func Run() error {
-	fmt.Println("RUN")
+	db, err := db.NewDatabase()
+	if err != nil {
+		fmt.Println("Failed to connect to db")
+		return err
+	}
+
+	if err := db.Ping(context.Background()); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func main() {
 	fmt.Println("GO REST API")
-	if err := Run(); err != nil {
 
+	if err := Run(); err != nil {
+		os.Exit(1)
 	}
 }
